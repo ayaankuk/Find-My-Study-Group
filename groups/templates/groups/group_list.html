@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Study Groups{% endblock %}
+{% block content %}
+  <section class="controls">
+    <form method="get" style="display:contents">
+      <input type="text" name="q" placeholder="Search groups…" value="{{ search }}"/>
+      <select name="topic">
+        <option value="">All topics</option>
+        {% for t in topics %}
+          <option value="{{ t.name }}" {% if selected_topic == t.name %}selected{% endif %}>{{ t.name }}</option>
+        {% endfor %}
+      </select>
+      <div style="display:flex; gap:8px;">
+        <select name="course">
+          <option value="">All courses</option>
+          {% for c in courses %}
+            <option value="{{ c.code }}" {% if selected_course == c.code %}selected{% endif %}>{{ c.code }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit">Filter</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="grid">
+    {% for g in groups %}
+      <article class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h3 style="margin:0;"><a href="{% url 'groups:detail' g.id %}" style="text-decoration:none; color:inherit;">{{ g.title }}</a></h3>
+          <span class="badge">{{ g.memberships.all|dictsort:"status"|length }} 👥</span>
+        </div>
+        {% if g.course %}<div class="meta">{{ g.course }}</div>{% endif %}
+        <div class="meta">Room: <strong>{{ g.room }}</strong>{% if g.meeting_time %} • Time: {{ g.meeting_time|date:"M d, Y, g:i a" }}{% endif %}</div>
+        {% if g.description %}<p class="meta">{{ g.description|truncatechars:140 }}</p>{% endif %}
+        <div>
+          {% for t in g.topics.all %}<span class="chip topic">{{ t.name }}</span>{% empty %}<span class="chip">No topics</span>{% endfor %}
+        </div>
+      </article>
+    {% empty %}
+      <p>No groups yet. <a href="{% url 'groups:create' %}">Create the first one</a>!</p>
+    {% endfor %}
+  </section>
+{% endblock %}

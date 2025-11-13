@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up{% endblock %}
+{% block content %}
+  <form method="post" class="form">
+    <h2 style="margin-top:0;">Create your account</h2>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create account</button>
+  </form>
+{% endblock %}

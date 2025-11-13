@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Create Study Group{% endblock %}
+{% block content %}
+  <form method="post" class="form">
+    <h2 style="margin-top:0;">Create a Study Group</h2>
+    {% csrf_token %}
+    <div class="row">
+      <div>
+        <label for="{{ form.title.id_for_label }}">Title</label>
+        {{ form.title }}
+      </div>
+      <div>
+        <label for="{{ form.course.id_for_label }}">Course</label>
+        {{ form.course }}
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label for="{{ form.room.id_for_label }}">Room</label>
+        {{ form.room }}
+      </div>
+      <div>
+        <label for="{{ form.meeting_time.id_for_label }}">Meeting Time</label>
+        {{ form.meeting_time }}
+      </div>
+    </div>
+    <div>
+      <label for="{{ form.description.id_for_label }}">Description</label>
+      {{ form.description }}
+    </div>
+    <div>
+      <label for="{{ form.topic_names.id_for_label }}">Topics</label>
+      {{ form.topic_names }}
+      <div class="meta">Add comma-separated topics.</div>
+    </div>
+    <button type="submit">Create Group</button>
+  </form>
+{% endblock %}

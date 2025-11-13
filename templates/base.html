@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Find My Study Group{% endblock %}</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+  {% block extrahead %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark">🦅</span>
+      <a href="{% url 'groups:list' %}" class="brand-text">Find My Study Group</a>
+    </div>
+    <nav class="nav">
+      {% if user.is_authenticated %}
+        <span class="nav-hello">Hi, {{ user.username }}!</span>
+        <a class="nav-link" href="{% url 'groups:create' %}">Create Group</a>
+        <a class="nav-link" href="{% url 'groups:requests' %}">Join Requests</a>
+        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+      {% else %}
+        <a class="nav-link" href="{% url 'login' %}">Login</a>
+        <a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a>
+      {% endif %}
+    </nav>
+  </header>
+  <main class="container">
+    {% for message in messages %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">
+    <p>Made for Golden Hawks — Laurier-inspired 💜💛</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Join Requests{% endblock %}
+{% block content %}
+  <section class="card">
+    <h2 style="margin-top:0;">Pending Join Requests</h2>
+    {% if pending_memberships %}
+      <ul>
+        {% for m in pending_memberships %}
+          <li style="margin-bottom:8px;">
+            <strong>{{ m.user.username }}</strong> → <a href="{% url 'groups:detail' m.group.id %}">{{ m.group.title }}</a>
+            <div class="actions" style="margin-top:6px;">
+              <form method="post" action="{% url 'groups:approve_request' m.id %}">{% csrf_token %}
+                <button class="btn primary" type="submit">Approve</button>
+              </form>
+              <form method="post" action="{% url 'groups:reject_request' m.id %}">{% csrf_token %}
+                <button class="btn danger" type="submit">Reject</button>
+              </form>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No pending requests right now.</p>
+    {% endif %}
+  </section>
+{% endblock %}

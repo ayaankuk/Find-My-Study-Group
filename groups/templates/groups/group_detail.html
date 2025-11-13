@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}{{ group.title }}{% endblock %}
+{% block content %}
+  <article class="card">
+    <h2 style="margin-top:0;">{{ group.title }}</h2>
+    {% if group.course %}<div class="meta">{{ group.course }}</div>{% endif %}
+    <div class="meta">Room: <strong>{{ group.room }}</strong>{% if group.meeting_time %} • Time: {{ group.meeting_time|date:"M d, Y, g:i a" }}{% endif %}</div>
+    {% if group.description %}<p>{{ group.description }}</p>{% endif %}
+    <div style="margin-bottom:10px;">
+      {% for t in group.topics.all %}<span class="chip topic">{{ t.name }}</span>{% empty %}<span class="chip">No topics</span>{% endfor %}
+    </div>
+    <div class="actions">
+      {% if user.is_authenticated %}
+        {% if is_owner %}
+          <a class="btn" href="{% url 'groups:requests' %}">Manage Join Requests</a>
+        {% else %}
+          {% if existing_membership %}
+            <span class="chip">Status: {{ existing_membership.status }}</span>
+          {% else %}
+            <form method="post" action="{% url 'groups:request_join' group.id %}">{% csrf_token %}
+              <button class="btn primary" type="submit">Request to Join</button>
+            </form>
+          {% endif %}
+        {% endif %}
+      {% else %}
+        <a class="btn primary" href="{% url 'login' %}">Login to request</a>
+      {% endif %}
+    </div>
+  </article>
+
+  <section style="margin-top:16px;">
+    <div class="card">
+      <h3 style="margin-top:0;">Members</h3>
+      <ul>
+        {% for m in approved_members %}
+          <li>{{ m.user.username }}{% if m.role == 'OWNER' %} (owner){% endif %}</li>
+        {% empty %}
+          <li>No members yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+{% endblock %}
