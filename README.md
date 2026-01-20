@@ -20,4 +20,3 @@ python manage.py runserver
 
 Open http://127.0.0.1:8000/
 
-> To pre-load courses later, add them via the admin or build a simple import script.
